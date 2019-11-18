@@ -9,6 +9,10 @@
 /* base code written by Dgounaris https://github.com/dgounaris
  * I am changing the AI portion to run on CUDA_C */
 
+/**
+ * This code handles the user commands to make the board and interface the code
+ */
+
 void inputformat(char* fullarg) {
 	while ((*fullarg)!='\0') {
 		if ((*fullarg)<32 || (*fullarg)==127) {
