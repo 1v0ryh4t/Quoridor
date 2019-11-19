@@ -1,10 +1,20 @@
-void minpathsMinMax(int size, char** walltrack, int* minpathw, int* minpathb);
+/*
+ * aiCopy.h
+ *
+ *  Created on: Nov 18, 2019
+ *      Author: tanner
+ */
+
+#ifndef AIMINMAX_H_
+#define AIMINMAX_H_
+
+void minpaths(int size, char** walltrack, int* minpathw, int* minpathb);
 /*
 	calls getpath to update minpath for both players, then returns minimum moves number to end for each player
 	arguments: length of board size, table of wall positions, pointers to 2 ints and updating them to min path length for each player
 	returns nothing, updates path tables through getpath and gets min paths for each player
 */
-void getmoveMinMax(int size, char** walltrack, char* color, int move, int* wins, int* sims, int*chosenr, int* chosenc, char* chosenori, int analdepth, int* foundmove, double startvaluew, double startvalueb);
+void getmove(int size, char** walltrack, char* color, int move, int* wins, int* sims, int*chosenr, int* chosenc, char* chosenori, int analdepth, int* foundmove, double startvaluew, double startvalueb);
 /*
 	-plays out potential moves for each player up to a tree depth of analdepth,
 	 skipping moves that worsen position and stopping a move evaluation if an enemy move can
@@ -27,3 +37,6 @@ void getmoveMinMax(int size, char** walltrack, char* color, int move, int* wins,
 				-2 doubles, the evaluation of the current position for white and black
 				 Is updated for each function call and used to evaluate further moves
 */
+
+
+#endif /* AIMINMAX_H_ */

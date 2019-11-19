@@ -5,21 +5,21 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../ai.c \
-../aiCopy.c \
+../aiMinMax.c \
 ../main.c \
 ../play.c \
 ../setup.c 
 
 OBJS += \
 ./ai.o \
-./aiCopy.o \
+./aiMinMax.o \
 ./main.o \
 ./play.o \
 ./setup.o 
 
 C_DEPS += \
 ./ai.d \
-./aiCopy.d \
+./aiMinMax.d \
 ./main.d \
 ./play.d \
 ./setup.d 

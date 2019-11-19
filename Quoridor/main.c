@@ -6,13 +6,6 @@
 #include "ai.h"
 #include "globals.h"
 
-/* base code written by Dgounaris https://github.com/dgounaris
- * I am changing the AI portion to run on CUDA_C */
-
-/**
- * This code handles the user commands to make the board and interface the code
- */
-
 void inputformat(char* fullarg) {
 	while ((*fullarg)!='\0') {
 		if ((*fullarg)<32 || (*fullarg)==127) {
@@ -26,19 +19,17 @@ void inputformat(char* fullarg) {
 }
 
 int main(void) {
-	//selori is unused, changed name to GPUMinimax
-	char fullarg[30], *arg, name[]="GPUMinimax", **walltrack=NULL, col, *colortemp, orientation[12], *orientationcp, /*selori=' ',*/ color[6], chosenori='t';
+	char fullarg[30], *arg, name[]="ABPro", **walltrack=NULL, col, *colortemp, orientation[12], *orientationcp, selori=' ', color[6], chosenori='t';
 	int i, size, r, c, chosenrow=-1, chosencol=-1, wins=0, sims=0, foundmove, analdepth /*he he*/;
-	History history=NULL; //added type History to this because it was bugging me
+	history=NULL;
 	double startvaluew, startvalueb;
-	//removed undescores from known_command, list_commands, and clear_board. removed " ch, " after char
-	char commands[13][20]={"name", "knowncommand", "listcommands",
-			"quit", "boardsize", "clearboard", "walls",
+	char ch, commands[13][20]={"name", "known_command", "list_commands",
+			"quit", "boardsize", "clear_board", "walls",
 			"playmove", "playwall", "genmove", "undo",
 			"winner", "showboard"};
 	do {
 		do {
-			fgets(fullarg, sizeof(fullarg), stdin);//this code takes in the string commands for human interface
+			fgets(fullarg, sizeof(fullarg), stdin);
 			inputformat(fullarg);
 			strtok(fullarg, "#"); //removing # and following characters
 			arg=strtok(fullarg, " \n\t");
@@ -51,14 +42,14 @@ int main(void) {
 			printf("=\n\n");
 			return 0;
 		}
-		else if (strcmp(arg, "listcommands")==0) {
+		else if (strcmp(arg, "list_commands")==0) {
 			printf("=");
 			for (i=0;i<13;i++) {
 				printf("%s\n", commands[i]);
 			}
 			printf("\n\n");
 		}
-		else if (strcmp(arg, "knowncommand")==0) {
+		else if (strcmp(arg, "known_command")==0) {
 			scanf("%14s", arg);
 			for (i=0;i<13;i++) {
 				if (strcmp(arg, commands[i])==0) {
@@ -94,7 +85,7 @@ int main(void) {
 				continue;
 			}
 		}
-        else if (strcmp(arg, "clearboard")==0) {
+        else if (strcmp(arg, "clear_board")==0) {
             clr(walltrack, size);
             clrhistory(&history);
 			setpawns(size);
@@ -236,7 +227,7 @@ int main(void) {
 		}
 		else if (strcmp(arg, "genmove")==0) {
 			getpath(size, walltrack);
-			colortemp=strtok(NULL, " \n\t");// if color exists, continue
+			colortemp=strtok(NULL, " \n\t");
 			if (colortemp==NULL) {
 				printf("? syntax error\n\n");
 				continue;
