@@ -29,14 +29,14 @@ void getmove(int size, char** walltrack, char* color, int move, int *wins, int *
 	startvalueb=100*(minpathw-minpathb)+black.walls-white.walls+1/((double)minpathb);
 	if (move==2) {//check for winning move immidiately
 		if (strcmp(color, "white")==0) {
-			if (black.row==0) {
+			if (black.row==0) {//if black wins
 				*wins=1;
 				*sims=1;
 				return;
 			}
 		}
-		else {
-			if (white.row==size-1) {
+		else {//if color black
+			if (white.row==size-1) {//if white wins
 				*wins=1;
 				*sims=1;
 				return;
@@ -87,7 +87,10 @@ void getmove(int size, char** walltrack, char* color, int move, int *wins, int *
 				white.col=possiblemoves[i][1];
 				minpaths(size, walltrack, &minpathw, &minpathb);
 				initvalue=100*(minpathb-minpathw)+white.walls-black.walls+1/((double)minpathw);
-				historyupdate(&history, color, white.row, white.col, ' ');
+				historyupdate(&history, color, white.row, white.col, ' ');//hostoryupdate stores nextmove?
+				printf("i = %d\n",i);//TODO: kill these
+				printf("history row = %d\n", history->row);//TODO: kill these
+				printf("history col = %d\n", history->col);//TODO: kill these
 				if (initvalue<startvaluew) {
 					undo(&history, walltrack, size, 1);
 					continue;

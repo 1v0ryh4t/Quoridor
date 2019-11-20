@@ -243,7 +243,9 @@ int main(void) {
 				analdepth=4;
 				do {
 					foundmove=0;
-					getmove(size, walltrack, color, 1, &wins, &sims, &chosenrow, &chosencol, &chosenori, analdepth, &foundmove, startvaluew, startvalueb);
+					//TODO: uncomment this. it is standard
+					//getmove(size, walltrack, color, 1, &wins, &sims, &chosenrow, &chosencol, &chosenori, analdepth, &foundmove, startvaluew, startvalueb);
+					minMaxDecision(size, walltrack, 4, color, &chosenrow, &chosencol, &chosenori); foundmove = 1;
 					analdepth+=2;
 				}while(foundmove==0);
 				printf("= %c%d", chosencol+'A', chosenrow+1);
