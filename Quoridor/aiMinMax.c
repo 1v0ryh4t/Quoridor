@@ -30,13 +30,14 @@ int minVal(int size, char** walltrack, int depth, char* color, int row, int col)
 	//printf("min\n");
 	int minpathw, minpathb = size*size;
 	minpathsMinMax(size, walltrack, &minpathw, &minpathb);
-	if (black.row==0 || white.row==size-1 || depth==0) {//TODO: concern color
-		int debugnum = ((minpathw - minpathb)+epsilon*((white.walls-black.walls)+1));//TODO: kill this var
-		return debugnum;
-	}
 	int v = 9999;//supposed to be inf
 	//iterate through all legal actions using possiblemoves
 	if (strcmp(color, "white")==0) {
+		if (black.row==0 || white.row==size-1 || depth==0) {//TODO: concern color
+			int debugnum = 100*((minpathw - minpathb)+epsilon*((black.walls-white.walls)+1))/minpathb;//TODO: kill this var
+			//printf("min eval w = %d\n",debugnum);
+			return debugnum;
+		}
 		getvalidmoves(size, walltrack, color, white.row, white.col);//possiblemoves updated
 		for (int i=0;i<6;i++) {
 			if (possiblemoves[i][0]!=-1) {
@@ -57,6 +58,11 @@ int minVal(int size, char** walltrack, int depth, char* color, int row, int col)
 		}
 	}
 	else {
+		if (black.row==0 || white.row==size-1 || depth==0) {//TODO: concern color
+			int debugnum = 100*((minpathb - minpathw)+epsilon*((white.walls-black.walls)+1))/minpathw;//TODO: kill this var
+			//printf("min eval b = %d\n",debugnum);
+			return debugnum;
+		}
 		getvalidmoves(size, walltrack, color, black.row, black.col);//possiblemoves updated
 		for (int i=0;i<6;i++) {
 			if(possiblemoves[i][0]!=-1 && strcmp(color, "black")==0){
@@ -75,6 +81,7 @@ int minVal(int size, char** walltrack, int depth, char* color, int row, int col)
 			//undo(&history, walltrack, size, 1);
 		}
 	}
+	//printf("min v = %d\n",v);
 	return v;
 }
 
@@ -83,13 +90,13 @@ int maxVal(int size, char** walltrack, int depth, char* color, int row, int col)
 	//printf("max\n");
 	int minpathw, minpathb = size*size;
 	minpathsMinMax(size, walltrack, &minpathw, &minpathb);
-	if (black.row==0 || white.row==size-1 || depth==0) {//TODO: concern color
-		//TODO: alter this eq depending on color
-		int debugnum = ((minpathw - minpathb)+epsilon*((white.walls-black.walls)+1));//TODO: kill this var
-		return debugnum;
-	}
 	int v = -9999;
 	if (strcmp(color, "white")==0) {
+		if (black.row==0 || white.row==size-1 || depth==0) {//TODO: concern color
+			int debugnum = 100*((minpathw - minpathb)+epsilon*((black.walls-white.walls)+1))/minpathb;//TODO: kill this var
+			//printf("max eval w = %d\n",debugnum);
+			return debugnum;
+		}
 		getvalidmoves(size, walltrack, color, white.row, white.col);//possiblemoves updated
 		for (int i=0;i<6;i++) {
 			if (possiblemoves[i][0]!=-1) {
@@ -108,7 +115,12 @@ int maxVal(int size, char** walltrack, int depth, char* color, int row, int col)
 			//undo(&history, walltrack, size, 1);
 		}
 	}
-	else {
+	else {//black
+		if (black.row==0 || white.row==size-1 || depth==0) {//TODO: concern color
+			int debugnum = 100*((minpathb - minpathw)+epsilon*((white.walls-black.walls)+1))/minpathw;//TODO: kill this var
+			//printf("max eval b = %d\n",debugnum);
+			return debugnum;
+		}
 		getvalidmoves(size, walltrack, color, black.row, black.col);//possiblemoves updated
 		for (int i=0;i<6;i++) {
 			if(possiblemoves[i][0]!=-1 && strcmp(color, "black")==0){
@@ -127,12 +139,16 @@ int maxVal(int size, char** walltrack, int depth, char* color, int row, int col)
 			//undo(&history, walltrack, size, 1);
 		}
 	}
+	//printf("max v = %d\n",v);
 	return v;
 }
 
 //will be kernelcall. This function chooses chosenr, chosenc, and chosenori
 void minMaxDecision(int size, char** walltrack, int depth, char* color, int*chosenr, int* chosenc, char* chosenori) {
 	int bestVal = -9999;
+	int bestrow;
+	int bestcol;
+	int bestori;
 	if (strcmp(color, "white")==0) {
 		getvalidmoves(size, walltrack, color, white.row, white.col);
 		for (int i=0;i<6;i++) {
@@ -141,17 +157,20 @@ void minMaxDecision(int size, char** walltrack, int depth, char* color, int*chos
 				white.col=possiblemoves[i][1];//simulate nextMove
 				historyupdate(&history, color, white.row, white.col, ' ');//hostoryupdate simulates nextmove?
 				//printf("white new row = %d\n", white.row); printf("white new col = %d\n", white.col);
-				//TODO: get black to move south default, and get white to get to goal
+				//TODO: get white to get to goal
 				int currVal = minVal(size, walltrack, depth, color, white.row, white.col);
 				if(currVal > bestVal){
 					bestVal = currVal;
-					*chosenr = white.row;
-					*chosenc = white.col;
-					*chosenori = ' ';
+					bestrow = white.row;
+					bestcol = white.col;
+					bestori = ' ';
 				}
 			}
-			undo(&history, walltrack, size, 1);
 		}
+		//*chosenr = bestrow;
+		//*chosenc = bestcol;
+		//*chosenori = bestori;
+		undo(&history, walltrack, size, 1);
 	}
 	else {
 		for (int i=0;i<6;i++) {
@@ -160,18 +179,24 @@ void minMaxDecision(int size, char** walltrack, int depth, char* color, int*chos
 				black.row=possiblemoves[i][0];//simulate nextMove
 				black.col=possiblemoves[i][1];//simulate nextMove
 				historyupdate(&history, color, black.row, black.col, ' ');//hostoryupdate stores nextmove?
-				printf("black new row = %d\n", black.row); printf("black new col = %d\n", black.col);
+				//printf("black new row = %d\n", black.row); printf("black new col = %d\n", black.col);
 				int currVal = minVal(size, walltrack, depth, color, black.row, black.col);
 				if(currVal > bestVal){
 					bestVal = currVal;
-					*chosenr = black.row;
-					*chosenc = black.col;
-					*chosenori = ' ';
+					bestrow = black.row;
+					bestcol = black.col;
+					bestori = ' ';
 				}
 			}
-			undo(&history, walltrack, size, 1);
 		}
+		//*chosenr = bestrow;
+		//*chosenc = bestcol;
+	    //*chosenori = bestori;
+		undo(&history, walltrack, size, 1);
 	}
+	*chosenr = bestrow;
+	*chosenc = bestcol;
+	*chosenori = bestori;
 	return;
 }
 

@@ -88,9 +88,6 @@ void getmove(int size, char** walltrack, char* color, int move, int *wins, int *
 				minpaths(size, walltrack, &minpathw, &minpathb);
 				initvalue=100*(minpathb-minpathw)+white.walls-black.walls+1/((double)minpathw);
 				historyupdate(&history, color, white.row, white.col, ' ');//hostoryupdate stores nextmove?
-				printf("i = %d\n",i);//TODO: kill these
-				printf("history row = %d\n", history->row);//TODO: kill these
-				printf("history col = %d\n", history->col);//TODO: kill these
 				if (initvalue<startvaluew) {
 					undo(&history, walltrack, size, 1);
 					continue;
