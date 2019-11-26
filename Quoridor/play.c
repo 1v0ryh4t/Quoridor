@@ -184,10 +184,8 @@ void getpath (int size, char** walltrack) {
 		temp=0;
 		for (k=0;k<size;k++) {
 			for (j=0;j<size;j++) {
-				//printf(" white.pathing = %c",white.pathing[k][j]);//TODO:kill later
 				if (white.pathing[k][j]==moves) {
 					getvalidmoves(size, walltrack, "white", k, j);
-					//printf(" white.pathing = %c",white.pathing[k][j]);//TODO:kill later
 					for (i=0;i<6;i++) {
 						if (possiblemoves[i][0]!=-1 && white.pathing[possiblemoves[i][0]][possiblemoves[i][1]]==-1) {
 							white.pathing[possiblemoves[i][0]][possiblemoves[i][1]]=moves+1;
@@ -214,7 +212,6 @@ void getpath (int size, char** walltrack) {
 		}
 		moves++;
 		//stop when no more possible moves for both colors
-		//printf("moves = %d",moves);//TODO: kill later. trying to figure out what moves does. It's connected to winning somehow
 	}while(temp);
 	return;
 }
@@ -313,6 +310,14 @@ void updatepawn(char* color, int r, int c) {
 	}
 	return;
 }
+//resets possiblemoves
+void clrvalidmoves(){
+	for (int i=0;i<6;i++) {
+		for (int j=0;j<2;j++) {
+			possiblemoves[i][j]=-1;
+		}
+	}
+}
 
 void getvalidmoves(int size, char** walltrack, char* color, int row, int col) {
 	int i, j;
@@ -405,8 +410,6 @@ void getvalidmoves(int size, char** walltrack, char* color, int row, int col) {
 				}
 			}
 		}
-		//printf("walltrack[row][col] = %c \n",walltrack[row][col]);//TODO: kill later
-		//printf("possiblemoves[row][col] = %c \n",possiblemoves[row][col]);//TODO: kill later. prints garbage
 	}
 	//for black
 	else if (strcmp(color, "black")==0) {
