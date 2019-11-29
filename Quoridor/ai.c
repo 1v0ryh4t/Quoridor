@@ -93,6 +93,7 @@ void getmove(int size, char** walltrack, char* color, int move, int *wins, int *
 					continue;
 				}
 				initvalue=100*(minpathw-minpathb)+black.walls-white.walls+1/((double)minpathb);
+				//printf("black.walls-white.walls+1/((double)minpathb) = %f\n",black.walls-white.walls+1/((double)minpathb));
 				if (initvalue<startvalueb) {
 					if (move%2==0) {
 						undo(&history, walltrack, size, 1);

@@ -421,8 +421,8 @@ void getvalidmoves(int size, char** walltrack, char* color, int row, int col) {
                 if (row+1<size && !(col-1>=0 && walltrack[row+1][col-1]=='H') &&  walltrack[row+1][col]!='H') //for up move
                 {
                         if (white.row!=row+1 || white.col!=col) {//normal move
-                                possiblemoves[0][0]=row+1;
-                                possiblemoves[0][1]=col;
+                                possiblemoves[1][0]=row+1;//changes so down is default for black
+                                possiblemoves[1][1]=col;//changes so down is default for black
                         }
                         else if (row+2<size && !(col-1>=0 && walltrack[row+2][col-1]=='H') && walltrack[row+2][col]!='H') { //jump
                                 possiblemoves[4][0]=row+2;
@@ -442,8 +442,8 @@ void getvalidmoves(int size, char** walltrack, char* color, int row, int col) {
                 if (walltrack[row][col]!='H' && row-1>=0 && !(col-1>=0 && walltrack[row][col-1]=='H')) //for down move
                 {
                         if (white.row!=row-1 || white.col!=col) {//normal move
-                                possiblemoves[1][0]=row-1;
-                                possiblemoves[1][1]=col;
+                                possiblemoves[0][0]=row-1;//changes so down is default for black
+                                possiblemoves[0][1]=col;//changes so down is default for black
                         }
                         else if (row-2>=0 && !(col-1>=0 && walltrack[row-1][col-1]=='H') && walltrack[row-1][col]!='H') {//jump
                                         possiblemoves[4][0]=row-2;
