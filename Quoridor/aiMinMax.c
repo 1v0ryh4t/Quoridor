@@ -148,9 +148,9 @@ void minMaxDecision(int size, char** walltrack, int depth, char* color, int*chos
 				white.row=pawnmoves[i][0];//simulate nextMove
 				white.col=pawnmoves[i][1];//simulate nextMove
 				historyupdate(&history, color, white.row, white.col, ' ');
-				printf("white moves to %d, %d\n",white.row, white.col);
+				//printf("white moves to %d, %d\n",white.row, white.col);
 				int currVal = -1*(minVal(size, walltrack, depth, color, white.row, white.col));
-				printf("currVal = %d\n",currVal);
+				//printf("currVal = %d\n",currVal);
 				if(currVal > bestVal){
 					bestVal = currVal;
 					bestrow = white.row;
@@ -216,6 +216,14 @@ void minMaxDecision(int size, char** walltrack, int depth, char* color, int*chos
 						}
 						undo(&history, walltrack, size, 1);
 					}
+				}//NOTE: need to undo??
+			}
+			for (int i=1;i<=size;i++) {//wall code
+				for (int j=0;j<=size-1;j++) {
+					minpathsMinMax(size, walltrack, &minpathw, &minpathb);
+					if (black.pathing[i-1][j]>5) {
+						continue;
+					}
 					if (isvalidwall(walltrack, 'V', i, j, size, "white")) {
 						walltrack[i][j]='V';
 						historyupdate(&history, color, i, j, 'V');
@@ -249,6 +257,14 @@ void minMaxDecision(int size, char** walltrack, int depth, char* color, int*chos
 							bestori = 'H';
 						}
 						undo(&history, walltrack, size, 1);
+					}
+				}
+			}
+			for (int i=1;i<=size;i++) {//wall code
+				for (int j=0;j<=size-1;j++) {
+					minpathsMinMax(size, walltrack, &minpathw, &minpathb);
+					if (white.pathing[i-1][j]>5) {
+						continue;
 					}
 					if (isvalidwall(walltrack, 'V', i, j, size, "black")) {
 						walltrack[i][j]='V';
