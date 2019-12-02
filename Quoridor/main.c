@@ -4,6 +4,7 @@
 #include "setup.h"
 #include "play.h"
 #include "ai.h"
+#include "aiMinMaxCUDA.h"
 #include "globals.h"
 
 void inputformat(char* fullarg) {
@@ -19,6 +20,7 @@ void inputformat(char* fullarg) {
 }
 
 int main(void) {
+	void minMaxDecision(int size, char** walltrack, int depth, char* color, int*chosenr, int* chosenc, char* chosenori);
 	char fullarg[30], *arg, name[]="ABPro", **walltrack=NULL, col, *colortemp, orientation[12], *orientationcp, selori=' ', color[6], chosenori='t';
 	int i, size, r, c, chosenrow=-1, chosencol=-1, wins=0, sims=0, foundmove, treedepth /*he he*/;
 	history=NULL;
