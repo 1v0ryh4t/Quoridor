@@ -20,7 +20,7 @@ void inputformat(char* fullarg) {
 
 int main(void) {
 	char fullarg[30], *arg, name[]="ABPro", **walltrack=NULL, col, *colortemp, orientation[12], *orientationcp, selori=' ', color[6], chosenori='t';
-	int i, size, r, c, chosenrow=-1, chosencol=-1, wins=0, sims=0, foundmove, analdepth /*he he*/;
+	int i, size, r, c, chosenrow=-1, chosencol=-1, wins=0, sims=0, foundmove, treedepth /*he he*/;
 	history=NULL;
 	double startvaluew, startvalueb;
 	char ch, commands[13][20]={"name", "known_command", "list_commands",
@@ -240,13 +240,13 @@ int main(void) {
 				strcpy(color, "black");
 			}
 			if (strcmp(color, "white")==0 || strcmp(color, "black")==0) {
-				analdepth=4;
+				treedepth=4;
 				do {
 					foundmove=0;
 					//TODO: uncomment this. it is standard
-				    //getmove(size, walltrack, color, 1, &wins, &sims, &chosenrow, &chosencol, &chosenori, analdepth, &foundmove, startvaluew, startvalueb);
+				    //getmove(size, walltrack, color, 1, &wins, &sims, &chosenrow, &chosencol, &chosenori, treedepth, &foundmove, startvaluew, startvalueb);
 					minMaxDecision(size, walltrack, 4, color, &chosenrow, &chosencol, &chosenori); foundmove = 1;
-					analdepth+=2;
+					treedepth+=2;
 				}while(foundmove==0);
 				printf("= %c%d", chosencol+'A', chosenrow+1);
 				if (chosenori!=' ') {
