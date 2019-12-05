@@ -4,7 +4,7 @@
 #include "setup.h"
 #include "play.h"
 #include "ai.h"
-#include "aiMinMaxCUDA.h"
+//#include "aiMinMaxCUDA.h"
 #include "globals.h"
 
 void inputformat(char* fullarg) {
